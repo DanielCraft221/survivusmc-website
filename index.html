@@ -6,9 +6,26 @@
     <title>SurvivusMC - Servidor de Minecraft Brasileiro</title>
     <link rel="icon" href="images/favicon-512x512.png" type="image/png" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="scripts/script.js"></script>
   </head>
   <body>
+    <div id="loading-screen">
+      <div class="loading-wrapper">
+        <div class="loading-logo">
+          <img
+            src="images/minecraft-text-loading.png"
+            alt="SurvivusMC"
+            class="loading-logo-img"
+          />
+        </div>
+        <div class="loading-container">
+          <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+          </div>
+          <div class="loading-percentage" id="loadingPercentage">0%</div>
+        </div>
+      </div>
+    </div>
+
     <nav>
       <div class="logo">
         <img src="images/favicon-512x512.png" alt="SurvivusMC Logo" />
@@ -37,8 +54,17 @@
         <li><a href="/suporte">Suporte</a></li>
       </ul>
     </nav>
+
+    <main id="main-content">
+      <div class="content">
+        <h1>Bem-vindo ao SurvivusMC</h1>
+        <p>O melhor servidor de Minecraft do Brasil</p>
+      </div>
+    </main>
+
     <footer class="footer">
       <p>Copyright © 2025 SurvivusMC - Não somos afiliados à Mojang AB.</p>
     </footer>
+    <script src="scripts/script.js"></script>
   </body>
 </html>
