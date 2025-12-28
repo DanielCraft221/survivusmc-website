@@ -5,8 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SurvivusMC - Servidor de Minecraft Brasileiro</title>
     <link rel="icon" href="images/favicon-512x512.png" type="image/png" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="scripts/script.js"></script>
   </head>
   <body>
-    <h1>Olá Mundo!</h1>
+    <nav>
+      <div class="logo">
+        <img src="images/favicon-512x512.png" alt="SurvivusMC Logo" />
+      </div>
+
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li>
+          <a
+            href="https://loja.survivusmc.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Loja</a
+          >
+        </li>
+        <li><a href="/jogar">Jogar</a></li>
+        <li><a href="/vote">Vote</a></li>
+        <li><a href="/equipe">Equipe</a></li>
+        <li><a href="/regras">Regras</a></li>
+        <li><a href="/suporte">Suporte</a></li>
+      </ul>
+    </nav>
+    <footer class="footer">
+      <p>Copyright © 2025 SurvivusMC - Não somos afiliados à Mojang AB.</p>
+    </footer>
   </body>
 </html>

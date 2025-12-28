@@ -1,1 +1,4 @@
-console.log("Olá Mundo");
+function toggleMenu() {
+  const navLinks = document.getElementById("navLinks");
+  navLinks.classList.toggle("active");
+}
