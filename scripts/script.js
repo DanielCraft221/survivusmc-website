@@ -6,6 +6,35 @@ const mainContent = document.getElementById("main-content");
 let progress = 0;
 let animationFrameId = null;
 
+function preloadImages() {
+  return new Promise((resolve) => {
+    const imagesToPreload = [
+      "/images/wallpaper-fundo-hero-logo.png",
+      "/images/minecraft-java-edition.png",
+      "/images/minecraft-bedrock-edition.png",
+    ];
+
+    let loadedCount = 0;
+    const totalImages = imagesToPreload.length;
+
+    if (totalImages === 0) {
+      resolve();
+      return;
+    }
+
+    imagesToPreload.forEach((src) => {
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          resolve();
+        }
+      };
+      img.src = src;
+    });
+  });
+}
+
 function updateLoading() {
   if (progress < 100) {
     const increment = Math.random() * 5 + 2;
@@ -22,22 +51,31 @@ function updateLoading() {
 
     animationFrameId = requestAnimationFrame(updateLoading);
   } else {
-    loadingProgress.style.width = "100%";
-    loadingPercentage.textContent = "100%";
+    completeLoading();
+  }
+}
+
+async function completeLoading() {
+  loadingProgress.style.width = "100%";
+  loadingPercentage.textContent = "100%";
+
+  await preloadImages();
+
+  mainContent.classList.add("show");
+
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  setTimeout(() => {
+    loadingScreen.classList.add("hide");
 
     setTimeout(() => {
-      loadingScreen.classList.add("hide");
+      loadingScreen.style.display = "none";
 
-      setTimeout(() => {
-        loadingScreen.style.display = "none";
-        mainContent.classList.add("show");
-
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-        }
-      }, 500);
-    }, 300);
-  }
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    }, 500);
+  }, 200);
 }
 
 if (document.readyState === "loading") {
