@@ -4,42 +4,103 @@ const loadingPercentage = document.getElementById("loadingPercentage");
 const mainContent = document.getElementById("main-content");
 
 let progress = 0;
+let animationFrameId = null;
 
 function updateLoading() {
   if (progress < 100) {
-    const increment = Math.random() * 3 + 0.5;
+    const increment = Math.random() * 5 + 2;
     progress += increment;
 
     if (progress > 100) progress = 100;
 
     const roundedProgress = Math.floor(progress);
-    loadingProgress.style.width = roundedProgress + "%";
-    loadingPercentage.textContent = roundedProgress + "%";
 
-    let delay = 50;
-    if (progress < 20 || progress > 80) {
-      delay = 100;
-    }
+    requestAnimationFrame(() => {
+      loadingProgress.style.width = roundedProgress + "%";
+      loadingPercentage.textContent = roundedProgress + "%";
+    });
 
-    setTimeout(updateLoading, delay);
+    animationFrameId = requestAnimationFrame(updateLoading);
   } else {
     loadingProgress.style.width = "100%";
     loadingPercentage.textContent = "100%";
 
     setTimeout(() => {
       loadingScreen.classList.add("hide");
-      mainContent.classList.add("show");
-    }, 500);
+
+      setTimeout(() => {
+        loadingScreen.style.display = "none";
+        mainContent.classList.add("show");
+
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      }, 500);
+    }, 300);
   }
 }
 
-window.addEventListener("load", () => {
-  setTimeout(updateLoading, 300);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    requestAnimationFrame(updateLoading);
+  });
+} else {
+  requestAnimationFrame(updateLoading);
+}
+
+let menuToggleTimeout;
+function toggleMenu() {
+  clearTimeout(menuToggleTimeout);
+  menuToggleTimeout = setTimeout(() => {
+    const navLinks = document.getElementById("navLinks");
+    navLinks.classList.toggle("active");
+  }, 50);
+}
+
+document.addEventListener("click", (e) => {
+  const navLinks = document.getElementById("navLinks");
+  const menuToggle = document.querySelector(".menu-toggle");
+
+  if (
+    navLinks.classList.contains("active") &&
+    !navLinks.contains(e.target) &&
+    !menuToggle.contains(e.target)
+  ) {
+    navLinks.classList.remove("active");
+  }
 });
 
-function toggleMenu() {
-  const navLinks = document.getElementById("navLinks");
-  navLinks.classList.toggle("active");
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const navLinks = document.getElementById("navLinks");
+    if (navLinks.classList.contains("active")) {
+      navLinks.classList.remove("active");
+    }
+  }
+});
+
+if ("IntersectionObserver" in window) {
+  const imageObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute("data-src");
+          }
+          observer.unobserve(img);
+        }
+      });
+    },
+    {
+      rootMargin: "50px",
+    }
+  );
+
+  document.querySelectorAll("img[data-src]").forEach((img) => {
+    imageObserver.observe(img);
+  });
 }
 
 async function handleFormSubmit(event) {
@@ -87,3 +148,20 @@ async function handleFormSubmit(event) {
     submitButton.disabled = false;
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    contactForm.addEventListener("submit", handleFormSubmit);
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+
+  if (menuToggleTimeout) {
+    clearTimeout(menuToggleTimeout);
+  }
+});
