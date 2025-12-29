@@ -97,12 +97,13 @@ body {
 }
 
 #main-content {
-  display: none;
+  opacity: 0;
   min-height: calc(100vh - 90px - 60px);
+  transition: opacity 0.3s ease;
 }
 
 #main-content.show {
-  display: block;
+  opacity: 1;
 }
 
 nav {
@@ -182,24 +183,122 @@ nav {
   transition: 0.3s;
 }
 
+.hero-section {
+  width: 100%;
+  height: 350px;
+  background-image: url("/images/wallpaper-fundo-hero-logo.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
 .content {
   padding: 50px 20px;
   color: #ffffff;
-  text-align: center;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.content h1 {
-  font-size: 36px;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 0px #000000;
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 20px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.content p {
-  font-size: 16px;
-  line-height: 1.6;
+.edition-card {
+  background-color: #2b2b2b;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edition-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  border-color: #7fd657;
+}
+
+.edition-card img {
+  width: 100%;
+  max-width: 253px;
+  height: auto;
   margin-bottom: 15px;
+}
+
+.edition-card h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  text-shadow: 2px 2px 0px #000000;
+  color: #ffffff;
+}
+
+.edition-card p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  color: #cccccc;
+}
+
+.edition-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  text-align: left;
+  display: inline-block;
+  width: 100%;
+}
+
+.edition-card ul li {
+  font-size: 12px;
+  color: #aaaaaa;
+  margin-bottom: 6px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.edition-card ul li::before {
+  content: "•";
+  color: #7fd657;
+  font-size: 16px;
+  position: absolute;
+  left: 0;
+}
+
+.btn-saiba-mais {
+  background-color: #7fd657;
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 25px;
+  font-size: 13px;
+  font-family: "Minecraftia", Arial, sans-serif;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 0 #5fa841;
+  margin-top: auto;
+  align-self: center;
+}
+
+.btn-saiba-mais:hover {
+  background-color: #8fe568;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 #5fa841;
+}
+
+.btn-saiba-mais:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #5fa841;
 }
 
 .footer {
@@ -268,6 +367,37 @@ img {
     border: 2px solid #ffffff;
   }
 
+  .hero-section {
+    height: 200px;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .edition-card {
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .edition-card img {
+    max-width: 207px;
+  }
+
+  .edition-card h2 {
+    font-size: 18px;
+  }
+
+  .edition-card p {
+    font-size: 12px;
+  }
+
+  .edition-card ul li {
+    font-size: 11px;
+  }
+
   nav {
     padding: 0 20px;
     height: 70px;
@@ -333,15 +463,6 @@ img {
     padding: 30px 15px;
   }
 
-  .content h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-  }
-
-  .content p {
-    font-size: 14px;
-  }
-
   #main-content {
     min-height: calc(100vh - 70px - 80px);
   }
@@ -362,6 +483,43 @@ img {
     font-size: 18px;
   }
 
+  .hero-section {
+    height: 150px;
+  }
+
+  .edition-card {
+    padding: 18px;
+    max-width: 350px;
+  }
+
+  .edition-card img {
+    max-width: 173px;
+  }
+
+  .edition-card h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .edition-card p {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .edition-card ul {
+    margin-bottom: 15px;
+  }
+
+  .edition-card ul li {
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+
+  .btn-saiba-mais {
+    padding: 8px 20px;
+    font-size: 12px;
+  }
+
   nav {
     padding: 0 15px;
     height: 65px;
@@ -380,14 +538,6 @@ img {
   .nav-links a {
     font-size: 13px;
     padding: 10px 14px;
-  }
-
-  .content h1 {
-    font-size: 24px;
-  }
-
-  .content p {
-    font-size: 13px;
   }
 
   #main-content {
