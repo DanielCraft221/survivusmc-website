@@ -4,8 +4,139 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SurvivusMC - Servidor de Minecraft Brasileiro</title>
-    <link rel="icon" href="images/favicon-512x512.png" type="image/png" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://loja.survivusmc.com" />
+    <link rel="icon" href="/images/favicon-512x512.png" type="image/png" />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/minecraft-text-loading.png"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      href="/fonts/Minecraftia-Regular.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin="anonymous"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        overflow-x: hidden;
+      }
+
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #2d2d2d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      #loading-screen.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loading-wrapper {
+        text-align: center;
+        width: 100%;
+        padding: 0 20px;
+      }
+
+      .loading-logo {
+        margin-bottom: 80px;
+      }
+
+      .loading-logo-img {
+        max-width: 90%;
+        width: 600px;
+        height: auto;
+        filter: drop-shadow(6px 6px 0px #1a1a1a)
+          drop-shadow(-2px -2px 0px rgba(255, 255, 255, 0.1));
+      }
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .loading-bar {
+        width: 750px;
+        max-width: 90%;
+        height: 20px;
+        background-color: #1a1a1a;
+        border: 3px solid #ffffff;
+        box-shadow: 0 0 0 2px #1a1a1a;
+        position: relative;
+      }
+
+      .loading-progress {
+        height: 100%;
+        background-color: #ffffff;
+        width: 0%;
+        transition: width 0.1s linear;
+        will-change: width;
+      }
+
+      .loading-percentage {
+        color: #ffffff;
+        font-size: 24px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 0px #000000;
+      }
+
+      /* Mobile loading adjustments */
+      @media (max-width: 768px) {
+        .loading-logo {
+          margin-bottom: 50px;
+        }
+        .loading-logo-img {
+          width: 90%;
+          max-width: 400px;
+        }
+        .loading-percentage {
+          font-size: 20px;
+        }
+        .loading-bar {
+          height: 16px;
+          border: 2px solid #ffffff;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .loading-logo-img {
+          width: 95%;
+          max-width: 300px;
+        }
+        .loading-percentage {
+          font-size: 18px;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="/css/style.css"
+      media="print"
+      onload="this.media='all'; this.onload=null;"
+    />
+    <noscript><link rel="stylesheet" href="/css/style.css" /></noscript>
     <script>
       window.si =
         window.si ||
@@ -20,9 +151,13 @@
       <div class="loading-wrapper">
         <div class="loading-logo">
           <img
-            src="images/minecraft-text-loading.png"
+            src="/images/minecraft-text-loading.png"
             alt="SurvivusMC"
             class="loading-logo-img"
+            width="600"
+            height="120"
+            loading="eager"
+            fetchpriority="high"
           />
         </div>
         <div class="loading-container">
@@ -36,16 +171,28 @@
 
     <nav>
       <div class="logo">
-        <img src="images/favicon-512x512.png" alt="SurvivusMC Logo" />
+        <img
+          src="/images/favicon-512x512.png"
+          alt="SurvivusMC Logo"
+          width="85"
+          height="85"
+          loading="lazy"
+        />
       </div>
 
-      <div class="menu-toggle" onclick="toggleMenu()">
+      <div
+        class="menu-toggle"
+        onclick="toggleMenu()"
+        role="button"
+        aria-label="Abrir menu"
+        tabindex="0"
+      >
         <span></span>
         <span></span>
         <span></span>
       </div>
 
-      <ul class="nav-links" id="navLinks">
+      <ul class="nav-links" id="navLinks" role="navigation">
         <li><a href="/">Home</a></li>
         <li>
           <a
@@ -73,6 +220,7 @@
     <footer class="footer">
       <p>Copyright © 2025 SurvivusMC - Não somos afiliados à Mojang AB.</p>
     </footer>
-    <script src="scripts/script.js"></script>
+
+    <script defer src="/scripts/script.js"></script>
   </body>
 </html>
