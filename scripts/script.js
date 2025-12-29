@@ -41,3 +41,49 @@ function toggleMenu() {
   const navLinks = document.getElementById("navLinks");
   navLinks.classList.toggle("active");
 }
+
+async function handleFormSubmit(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const token = form.querySelector('[name="cf-turnstile-response"]')?.value;
+
+  if (!token) {
+    alert("Por favor, complete a verificação de segurança");
+    return;
+  }
+
+  const submitButton = form.querySelector('button[type="submit"]');
+  const originalText = submitButton.textContent;
+  submitButton.textContent = "Verificando...";
+  submitButton.disabled = true;
+
+  try {
+    const response = await fetch("/api/verify-turnstile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("Verificação concluída! Enviando formulário...");
+
+      const formData = new FormData(form);
+
+      form.reset();
+    } else {
+      alert("Verificação de segurança falhou. Tente novamente.");
+      console.error("Erros:", result.errors);
+    }
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Erro ao verificar. Tente novamente mais tarde.");
+  } finally {
+    submitButton.textContent = originalText;
+    submitButton.disabled = false;
+  }
+}
