@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -21,6 +21,14 @@
       crossorigin="anonymous"
     />
     <style>
+      @font-face {
+        font-family: "Minecraftia";
+        src: url("/fonts/Minecraftia-Regular.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -133,7 +141,7 @@
       rel="stylesheet"
       href="/css/style.css"
       media="print"
-      onload="this.media='all'; this.onload=null;"
+      onload="this.media = 'all'"
     />
     <noscript><link rel="stylesheet" href="/css/style.css" /></noscript>
     <script>
@@ -190,8 +198,15 @@
       <div
         class="menu-toggle"
         onclick="toggleMenu()"
+        onkeydown="
+          if (event.key === 'Enter' || event.key === ' ') {
+            toggleMenu();
+            event.preventDefault();
+          }
+        "
         role="button"
         aria-label="Abrir menu"
+        aria-expanded="false"
         tabindex="0"
       >
         <span></span>
@@ -199,7 +214,7 @@
         <span></span>
       </div>
 
-      <ul class="nav-links" id="navLinks" role="navigation">
+      <ul class="nav-links" id="navLinks" aria-label="Menu principal">
         <li><a href="/">Home</a></li>
         <li>
           <a
@@ -217,7 +232,11 @@
     </nav>
 
     <main id="main-content">
-      <div class="hero-section"></div>
+      <div
+        class="hero-section"
+        role="img"
+        aria-label="Imagem de fundo do servidor SurvivusMC"
+      ></div>
 
       <div class="content">
         <div class="cards-container">
@@ -226,7 +245,6 @@
               src="/images/minecraft-java-edition.png"
               alt="Minecraft Java Edition"
               width="300"
-              height="auto"
               loading="lazy"
             />
             <h2>Acessar usando Java</h2>
@@ -236,7 +254,7 @@
               <li>Windows</li>
               <li>Linux</li>
             </ul>
-            <button class="btn-saiba-mais">Saiba mais</button>
+            <button type="button" class="btn-saiba-mais">Saiba mais</button>
           </div>
 
           <div class="edition-card">
@@ -244,7 +262,6 @@
               src="/images/minecraft-bedrock-edition.png"
               alt="Minecraft Bedrock Edition"
               width="300"
-              height="auto"
               loading="lazy"
             />
             <h2>Acessar usando Bedrock</h2>
@@ -256,14 +273,14 @@
               <li>Android</li>
               <li>iOS</li>
             </ul>
-            <button class="btn-saiba-mais">Saiba mais</button>
+            <button type="button" class="btn-saiba-mais">Saiba mais</button>
           </div>
         </div>
       </div>
     </main>
 
     <footer class="footer">
-      <p>Copyright © 2026 SurvivusMC - Não somos afiliados à Mojang AB.</p>
+      <p>Copyright &copy; 2026 SurvivusMC - Não somos afiliados à Mojang AB.</p>
     </footer>
 
     <script defer src="/scripts/script.js"></script>
