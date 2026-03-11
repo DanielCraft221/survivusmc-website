@@ -38,16 +38,11 @@ function preloadImages() {
 function updateLoading() {
   if (progress < 100) {
     const increment = Math.random() * 5 + 2;
-    progress += increment;
-
-    if (progress > 100) progress = 100;
+    progress = Math.min(progress + increment, 100);
 
     const roundedProgress = Math.floor(progress);
-
-    requestAnimationFrame(() => {
-      loadingProgress.style.width = roundedProgress + "%";
-      loadingPercentage.textContent = roundedProgress + "%";
-    });
+    loadingProgress.style.width = roundedProgress + "%";
+    loadingPercentage.textContent = roundedProgress + "%";
 
     animationFrameId = requestAnimationFrame(updateLoading);
   } else {
@@ -55,7 +50,17 @@ function updateLoading() {
   }
 }
 
+let isCompleting = false;
+
 async function completeLoading() {
+  if (isCompleting) return;
+  isCompleting = true;
+
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+
   loadingProgress.style.width = "100%";
   loadingPercentage.textContent = "100%";
 
@@ -70,10 +75,6 @@ async function completeLoading() {
 
     setTimeout(() => {
       loadingScreen.style.display = "none";
-
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
     }, 500);
   }, 200);
 }
@@ -86,13 +87,11 @@ if (document.readyState === "loading") {
   requestAnimationFrame(updateLoading);
 }
 
-let menuToggleTimeout;
 function toggleMenu() {
-  clearTimeout(menuToggleTimeout);
-  menuToggleTimeout = setTimeout(() => {
-    const navLinks = document.getElementById("navLinks");
-    navLinks.classList.toggle("active");
-  }, 50);
+  const navLinks = document.getElementById("navLinks");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const isActive = navLinks.classList.toggle("active");
+  menuToggle.setAttribute("aria-expanded", isActive ? "true" : "false");
 }
 
 document.addEventListener("click", (e) => {
@@ -105,6 +104,7 @@ document.addEventListener("click", (e) => {
     !menuToggle.contains(e.target)
   ) {
     navLinks.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
   }
 });
 
@@ -113,6 +113,10 @@ document.addEventListener("keydown", (e) => {
     const navLinks = document.getElementById("navLinks");
     if (navLinks.classList.contains("active")) {
       navLinks.classList.remove("active");
+
+      const menuToggle = document.querySelector(".menu-toggle");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.focus();
     }
   }
 });
@@ -133,7 +137,7 @@ if ("IntersectionObserver" in window) {
     },
     {
       rootMargin: "50px",
-    }
+    },
   );
 
   document.querySelectorAll("img[data-src]").forEach((img) => {
@@ -169,10 +173,16 @@ async function handleFormSubmit(event) {
     const result = await response.json();
 
     if (result.success) {
-      alert("Verificação concluída! Enviando formulário...");
-
       const formData = new FormData(form);
+      const formPayload = Object.fromEntries(formData.entries());
 
+      await fetch(form.action || "/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formPayload),
+      });
+
+      alert("Formulário enviado com sucesso!");
       form.reset();
     } else {
       alert("Verificação de segurança falhou. Tente novamente.");
@@ -197,9 +207,5 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("beforeunload", () => {
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
-  }
-
-  if (menuToggleTimeout) {
-    clearTimeout(menuToggleTimeout);
   }
 });
