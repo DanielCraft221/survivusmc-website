@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SurvivusMC — Servidor de Minecraft brasileiro compatível com Java e Bedrock Edition. Entre agora e sobreviva!"
+    />
     <title>SurvivusMC - Servidor de Minecraft Brasileiro</title>
     <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <link rel="dns-prefetch" href="https://loja.survivusmc.com" />
@@ -20,15 +24,8 @@
       type="font/ttf"
       crossorigin="anonymous"
     />
-    <style>
-      @font-face {
-        font-family: "Minecraftia";
-        src: url("/fonts/Minecraftia-Regular.ttf") format("truetype");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-      }
 
+    <style>
       * {
         margin: 0;
         padding: 0;
@@ -39,6 +36,25 @@
         font-family: Arial, sans-serif;
         background-color: #1a1a1a;
         overflow-x: hidden;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        background: #7fd657;
+        color: #1a1a1a;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 99999;
+        text-decoration: none;
+        border-radius: 0 0 6px 0;
+        transition: top 0.2s;
+      }
+
+      .skip-link:focus {
+        top: 0;
       }
 
       #loading-screen {
@@ -137,13 +153,15 @@
         }
       }
     </style>
+
     <link
       rel="stylesheet"
       href="/css/style.css"
       media="print"
-      onload="this.media = 'all'"
+      onload="this.media='all'"
     />
     <noscript><link rel="stylesheet" href="/css/style.css" /></noscript>
+
     <script>
       window.si =
         window.si ||
@@ -152,6 +170,7 @@
         };
     </script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
+
     <script>
       window.va =
         window.va ||
@@ -162,21 +181,31 @@
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
-    <div id="loading-screen">
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <div id="loading-screen" aria-hidden="true">
       <div class="loading-wrapper">
         <div class="loading-logo">
           <img
             src="/images/minecraft-text-loading.png"
-            alt="SurvivusMC"
+            alt=""
             class="loading-logo-img"
             width="600"
             height="120"
             loading="eager"
             fetchpriority="high"
+            aria-hidden="true"
           />
         </div>
         <div class="loading-container">
-          <div class="loading-bar">
+          <div
+            class="loading-bar"
+            role="progressbar"
+            aria-valuenow="0"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Carregando"
+          >
             <div class="loading-progress" id="loadingProgress"></div>
           </div>
           <div class="loading-percentage" id="loadingPercentage">0%</div>
@@ -184,45 +213,40 @@
       </div>
     </div>
 
-    <nav>
+    <nav aria-label="Menu principal">
       <div class="logo">
-        <img
-          src="/images/favicon-512x512.png"
-          alt="SurvivusMC Logo"
-          width="85"
-          height="85"
-          loading="lazy"
-        />
+        <a href="/" aria-label="SurvivusMC — página inicial">
+          <img
+            src="/images/favicon-512x512.png"
+            alt="SurvivusMC"
+            width="85"
+            height="85"
+            loading="lazy"
+          />
+        </a>
       </div>
 
-      <div
+      <button
         class="menu-toggle"
         onclick="toggleMenu()"
-        onkeydown="
-          if (event.key === 'Enter' || event.key === ' ') {
-            toggleMenu();
-            event.preventDefault();
-          }
-        "
-        role="button"
-        aria-label="Abrir menu"
+        aria-label="Abrir menu de navegação"
         aria-expanded="false"
-        tabindex="0"
+        aria-controls="navLinks"
+        type="button"
       >
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
 
-      <ul class="nav-links" id="navLinks" aria-label="Menu principal">
-        <li><a href="/">Home</a></li>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" aria-current="page">Home</a></li>
         <li>
           <a
             href="https://loja.survivusmc.com"
             target="_blank"
             rel="noopener noreferrer"
-            >Loja</a
-          >
+          >Loja <span class="sr-only">(abre em nova aba)</span></a>
         </li>
         <li><a href="/jogar">Jogar</a></li>
         <li><a href="/vote">Vote</a></li>
@@ -232,55 +256,71 @@
     </nav>
 
     <main id="main-content">
-      <div
-        class="hero-section"
-        role="img"
-        aria-label="Imagem de fundo do servidor SurvivusMC"
-      ></div>
+      <div class="hero-section" aria-hidden="true"></div>
 
       <div class="content">
         <div class="cards-container">
           <div class="edition-card">
             <img
               src="/images/minecraft-java-edition.png"
-              alt="Minecraft Java Edition"
+              alt="Ícone do Minecraft Java Edition"
               width="300"
               loading="lazy"
             />
             <h2>Acessar usando Java</h2>
             <p>Saiba como acessar usando a versão Java Edition.</p>
-            <ul>
+            <ul aria-label="Plataformas suportadas — Java Edition">
               <li>Mac</li>
               <li>Windows</li>
               <li>Linux</li>
             </ul>
-            <button type="button" class="btn-saiba-mais">Saiba mais</button>
+            <button
+              type="button"
+              class="btn-saiba-mais"
+              aria-label="Saiba mais sobre como acessar pelo Java Edition"
+            >
+              Saiba mais
+            </button>
           </div>
 
           <div class="edition-card">
             <img
               src="/images/minecraft-bedrock-edition.png"
-              alt="Minecraft Bedrock Edition"
+              alt="Ícone do Minecraft Bedrock Edition"
               width="300"
               loading="lazy"
             />
             <h2>Acessar usando Bedrock</h2>
             <p>Saiba como acessar usando a versão Bedrock Edition.</p>
-            <ul>
+            <ul aria-label="Plataformas suportadas — Bedrock Edition">
               <li>Xbox</li>
               <li>PlayStation</li>
               <li>Switch</li>
               <li>Android</li>
               <li>iOS</li>
             </ul>
-            <button type="button" class="btn-saiba-mais">Saiba mais</button>
+            <button
+              type="button"
+              class="btn-saiba-mais"
+              aria-label="Saiba mais sobre como acessar pelo Bedrock Edition"
+            >
+              Saiba mais
+            </button>
           </div>
         </div>
       </div>
     </main>
 
     <footer class="footer">
-      <p>Copyright &copy; 2024 - 2026 SurvivusMC - Não somos afiliados à Mojang AB.</p>
+      <p>
+        Copyright &copy; 2024&ndash;2026 SurvivusMC &mdash; Não somos afiliados à
+        <a
+          href="https://www.minecraft.net"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Mojang AB</a
+        >.
+      </p>
     </footer>
 
     <script defer src="/scripts/script.js"></script>
