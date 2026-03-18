@@ -5,6 +5,7 @@ const mainContent = document.getElementById("main-content");
 
 let progress = 0;
 let animationFrameId = null;
+let isCompleting = false;
 
 function preloadImages() {
   return new Promise((resolve) => {
@@ -15,42 +16,38 @@ function preloadImages() {
     ];
 
     let loadedCount = 0;
-    const totalImages = imagesToPreload.length;
-
-    if (totalImages === 0) {
-      resolve();
-      return;
-    }
+    const total = imagesToPreload.length;
 
     imagesToPreload.forEach((src) => {
       const img = new Image();
       img.onload = img.onerror = () => {
         loadedCount++;
-        if (loadedCount === totalImages) {
-          resolve();
-        }
+        if (loadedCount === total) resolve();
       };
       img.src = src;
     });
   });
 }
 
+function setProgress(value) {
+  const rounded = Math.floor(value);
+  loadingProgress.style.width = rounded + "%";
+  loadingPercentage.textContent = rounded + "%";
+
+  const bar = loadingProgress.closest("[role='progressbar']");
+  if (bar) bar.setAttribute("aria-valuenow", rounded);
+}
+
 function updateLoading() {
-  if (progress < 100) {
+  if (progress < 95) {
     const increment = Math.random() * 5 + 2;
-    progress = Math.min(progress + increment, 100);
-
-    const roundedProgress = Math.floor(progress);
-    loadingProgress.style.width = roundedProgress + "%";
-    loadingPercentage.textContent = roundedProgress + "%";
-
+    progress = Math.min(progress + increment, 95);
+    setProgress(progress);
     animationFrameId = requestAnimationFrame(updateLoading);
   } else {
     completeLoading();
   }
 }
-
-let isCompleting = false;
 
 async function completeLoading() {
   if (isCompleting) return;
@@ -61,22 +58,20 @@ async function completeLoading() {
     animationFrameId = null;
   }
 
-  loadingProgress.style.width = "100%";
-  loadingPercentage.textContent = "100%";
-
   await preloadImages();
+
+  progress = 100;
+  setProgress(100);
 
   mainContent.classList.add("show");
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  loadingScreen.classList.add("hide");
 
   setTimeout(() => {
-    loadingScreen.classList.add("hide");
-
-    setTimeout(() => {
-      loadingScreen.style.display = "none";
-    }, 500);
-  }, 200);
+    loadingScreen.style.display = "none";
+  }, 500);
 }
 
 if (document.readyState === "loading") {
@@ -87,11 +82,22 @@ if (document.readyState === "loading") {
   requestAnimationFrame(updateLoading);
 }
 
+window.addEventListener("beforeunload", () => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+});
+
 function toggleMenu() {
   const navLinks = document.getElementById("navLinks");
   const menuToggle = document.querySelector(".menu-toggle");
   const isActive = navLinks.classList.toggle("active");
+
   menuToggle.setAttribute("aria-expanded", isActive ? "true" : "false");
+  menuToggle.setAttribute(
+    "aria-label",
+    isActive ? "Fechar menu de navegação" : "Abrir menu de navegação"
+  );
 }
 
 document.addEventListener("click", (e) => {
@@ -105,6 +111,7 @@ document.addEventListener("click", (e) => {
   ) {
     navLinks.classList.remove("active");
     menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Abrir menu de navegação");
   }
 });
 
@@ -116,96 +123,8 @@ document.addEventListener("keydown", (e) => {
 
       const menuToggle = document.querySelector(".menu-toggle");
       menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Abrir menu de navegação");
       menuToggle.focus();
     }
-  }
-});
-
-if ("IntersectionObserver" in window) {
-  const imageObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-            img.removeAttribute("data-src");
-          }
-          observer.unobserve(img);
-        }
-      });
-    },
-    {
-      rootMargin: "50px",
-    },
-  );
-
-  document.querySelectorAll("img[data-src]").forEach((img) => {
-    imageObserver.observe(img);
-  });
-}
-
-async function handleFormSubmit(event) {
-  event.preventDefault();
-
-  const form = event.target;
-  const token = form.querySelector('[name="cf-turnstile-response"]')?.value;
-
-  if (!token) {
-    alert("Por favor, complete a verificação de segurança");
-    return;
-  }
-
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalText = submitButton.textContent;
-  submitButton.textContent = "Verificando...";
-  submitButton.disabled = true;
-
-  try {
-    const response = await fetch("/api/verify-turnstile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token }),
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      const formData = new FormData(form);
-      const formPayload = Object.fromEntries(formData.entries());
-
-      await fetch(form.action || "/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formPayload),
-      });
-
-      alert("Formulário enviado com sucesso!");
-      form.reset();
-    } else {
-      alert("Verificação de segurança falhou. Tente novamente.");
-      console.error("Erros:", result.errors);
-    }
-  } catch (error) {
-    console.error("Erro:", error);
-    alert("Erro ao verificar. Tente novamente mais tarde.");
-  } finally {
-    submitButton.textContent = originalText;
-    submitButton.disabled = false;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const contactForm = document.getElementById("contactForm");
-  if (contactForm) {
-    contactForm.addEventListener("submit", handleFormSubmit);
-  }
-});
-
-window.addEventListener("beforeunload", () => {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
   }
 });
