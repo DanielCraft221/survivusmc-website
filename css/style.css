@@ -248,12 +248,19 @@ nav {
 
 .hero-section {
   width: 100%;
-  height: 350px;
-  background-image: url("/images/wallpaper-fundo-hero-logo.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
+  background-color: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .content {
@@ -368,6 +375,16 @@ nav {
   box-shadow: 0 1px 0 #5fa841;
 }
 
+.disclaimer {
+  padding: 16px 20px;
+  text-align: center;
+  color: #888;
+  font-size: 11px;
+  line-height: 1.8;
+  background-color: #222;
+  border-top: 1px solid #333;
+}
+
 .footer {
   padding: 28px 16px;
   text-align: center;
@@ -427,10 +444,6 @@ img {
   .loading-bar {
     height: 16px;
     border: 2px solid #ffffff;
-  }
-
-  .hero-section {
-    height: 200px;
   }
 
   .cards-container {
@@ -546,10 +559,6 @@ img {
 
   .loading-percentage {
     font-size: 18px;
-  }
-
-  .hero-section {
-    height: 150px;
   }
 
   .edition-card {
