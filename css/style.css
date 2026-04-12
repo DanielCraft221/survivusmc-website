@@ -385,6 +385,15 @@ nav {
   border-top: 1px solid #333;
 }
 
+.disclaimer a {
+  color: #7fd657;
+  text-decoration: none;
+}
+
+.disclaimer a:hover {
+  text-decoration: underline;
+}
+
 .footer {
   padding: 28px 16px;
   text-align: center;
