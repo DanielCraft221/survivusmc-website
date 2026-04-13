@@ -256,6 +256,7 @@
     </nav>
 
     <main id="main-content">
+      <!-- FIX CLS: width e height explícitos reservam o espaço antes do carregamento -->
       <div class="hero-section">
         <img
           src="/images/wallpaper-fundo-hero-logo.png"
@@ -263,16 +264,20 @@
           class="hero-img"
           aria-hidden="true"
           loading="eager"
+          width="1920"
+          height="540"
         />
       </div>
 
       <div class="content">
         <div class="cards-container">
           <div class="edition-card">
+            <!-- FIX CLS: height explícito evita reflow ao carregar -->
             <img
               src="/images/minecraft-java-edition.png"
               alt="Ícone do Minecraft Java Edition"
               width="300"
+              height="300"
               loading="lazy"
             />
             <h2>Acessar usando Java</h2>
@@ -292,10 +297,12 @@
           </div>
 
           <div class="edition-card">
+            <!-- FIX CLS: height explícito evita reflow ao carregar -->
             <img
               src="/images/minecraft-bedrock-edition.png"
               alt="Ícone do Minecraft Bedrock Edition"
               width="300"
+              height="300"
               loading="lazy"
             />
             <h2>Acessar usando Bedrock</h2>
