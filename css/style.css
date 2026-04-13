@@ -1,3 +1,6 @@
+/* FIX CLS: font-display: optional — não causa reflow pois não troca a fonte
+   depois da renderização inicial. Se a fonte não carregar a tempo, usa o
+   fallback sem gerar Cumulative Layout Shift. */
 @font-face {
   font-family: "Minecraftia";
   src: url("/fonts/Minecraftia-Regular.ttf") format("truetype");
@@ -246,6 +249,9 @@ nav {
   display: block;
 }
 
+/* FIX CLS: aspect-ratio garante que o browser reserve o espaço correto para
+   a hero image antes mesmo de ela carregar, eliminando o layout shift.
+   O valor 1920/540 deve corresponder às dimensões reais da sua imagem. */
 .hero-section {
   width: 100%;
   background-color: #1a1a1a;
@@ -253,7 +259,7 @@ nav {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  aspect-ratio: 1920 / 540;
+  aspect-ratio: 1500 / 500;
 }
 
 .hero-img {
