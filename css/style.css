@@ -3,7 +3,7 @@
   src: url("/fonts/Minecraftia-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  font-display: optional;
+  font-display: block;
 }
 
 *,
@@ -254,6 +254,8 @@ nav {
   align-items: center;
   overflow: hidden;
   aspect-ratio: 1500 / 500;
+  min-height: clamp(120px, 33.3vw, 500px);
+  contain: layout;
 }
 
 .hero-img {
@@ -307,6 +309,7 @@ nav {
   max-width: 253px;
   height: auto;
   margin-bottom: 15px;
+  aspect-ratio: 1 / 1;
 }
 
 .edition-card h2 {
