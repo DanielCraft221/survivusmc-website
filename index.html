@@ -19,6 +19,12 @@
     />
     <link
       rel="preload"
+      as="image"
+      href="/images/favicon-512x512.png"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
       href="/fonts/Minecraftia-Regular.ttf"
       as="font"
       type="font/ttf"
@@ -221,7 +227,8 @@
             alt="SurvivusMC"
             width="85"
             height="85"
-            loading="lazy"
+            loading="eager"
+            fetchpriority="high"
           />
         </a>
       </div>
