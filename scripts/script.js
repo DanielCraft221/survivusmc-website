@@ -18,15 +18,49 @@ function preloadImages() {
     let loadedCount = 0;
     const total = imagesToPreload.length;
 
+    const timeout = setTimeout(resolve, 5000);
+
     imagesToPreload.forEach((src) => {
       const img = new Image();
       img.onload = img.onerror = () => {
         loadedCount++;
-        if (loadedCount === total) resolve();
+        if (loadedCount === total) {
+          clearTimeout(timeout);
+          resolve();
+        }
       };
       img.src = src;
     });
   });
+}
+
+async function completeLoading() {
+  if (isCompleting) return;
+  isCompleting = true;
+
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+
+  try {
+    await preloadImages();
+  } catch (err) {
+    console.error("Erro ao pré-carregar imagens:", err);
+  }
+
+  progress = 100;
+  setProgress(100);
+
+  mainContent.classList.add("show");
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  loadingScreen.classList.add("hide");
+
+  setTimeout(() => {
+    loadingScreen.style.display = "none";
+  }, 500);
 }
 
 function setProgress(value) {
@@ -43,9 +77,12 @@ function updateLoading() {
     const increment = Math.random() * 5 + 2;
     progress = Math.min(progress + increment, 95);
     setProgress(progress);
-    animationFrameId = requestAnimationFrame(updateLoading);
-  } else {
-    completeLoading();
+
+    if (progress < 95) {
+      animationFrameId = requestAnimationFrame(updateLoading);
+    } else {
+      completeLoading();
+    }
   }
 }
 
